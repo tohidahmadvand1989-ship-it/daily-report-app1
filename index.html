@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>گزارش عملکرد روزانه پروژه</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Added Babel Standalone for in-browser TSX/JSX transpilation -->
+  <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^18.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^18.2.0/",
+    "react/": "https://aistudiocdn.com/react@^18.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.25.0",
+    "path": "https://aistudiocdn.com/path@^0.12.7",
+    "express": "https://aistudiocdn.com/express@^5.1.0",
+    "url": "https://aistudiocdn.com/url@^0.11.4"
+  }
+}
+</script>
+  <style>
+    /* Light Theme (Default) */
+    :root {
+      --background: #f8fafc; /* Slate 50 */
+      --foreground: #0f172a; /* Slate 900 */
+      --card-background: #ffffff;
+      --card-foreground: #020617; /* Slate 950 */
+      --muted-foreground: #64748b; /* Slate 500 */
+      --border-color: #e2e8f0; /* Slate 200 */
+      --input-background: #ffffff;
+      --input-border: #cbd5e1; /* Slate 300 */
+      --ring-color: #10b981; /* Emerald 500 */
+      --table-header-background: #f1f5f9; /* Slate 100 */
+      --table-row-even-background: #f8fafc;
+      --table-row-hover-background: #f1f5f9;
+      --primary: #10b981; /* Emerald 500 */
+      --primary-foreground: #ffffff;
+      --secondary: #f1f5f9; /* Slate 100 */
+      --secondary-foreground: #0f172a;
+      --destructive: #ef4444; /* Red 500 */
+      --destructive-foreground: #ffffff;
+      --subtle-background: #f8fafc;
+      --subtle-border: #e2e8f0;
+      --link-color: #0d9488; /* Emerald 600 */
+      --selection-bg: #10b981;
+      --selection-fg: #ffffff;
+      --bg-dot: #e2e8f0;
+      --info: #0ea5e9; /* Sky 500 */
+      --destructive-soft-background: #fee2e2; /* Red 100 */
+      --destructive-soft-foreground: #b91c1c; /* Red 700 */
+      --warning-soft-background: #fef3c7; /* Amber 100 */
+      --warning-soft-foreground: #b45309; /* Amber 700 */
+      --neutral-soft-background: #e2e8f0; /* Slate 200 */
+      --neutral-soft-foreground: #475569; /* Slate 600 */
+    }
+
+    html[data-theme="dark"] {
+      --background: #0b1120;
+      --foreground: #cdd5e3;
+      --card-background: #131b2f;
+      --card-foreground: #f0f4fa;
+      --muted-foreground: #808ea3;
+      --border-color: #24314d;
+      --input-background: #0b1120;
+      --input-border: #24314d;
+      --ring-color: #38bdf8; /* Sky 400 */
+      --table-header-background: #1c2741;
+      --table-row-even-background: #131b2f;
+      --table-row-hover-background: #1c2741;
+      --primary: #38bdf8; /* Sky 400 */
+      --primary-foreground: #0b1120;
+      --secondary: #24314d;
+      --secondary-foreground: #f0f4fa;
+      --destructive: #f43f5e; /* Rose 500 */
+      --destructive-foreground: #ffffff;
+      --subtle-background: #131b2f;
+      --subtle-border: #24314d;
+      --link-color: #7dd3fc; /* Sky 300 */
+      --selection-bg: #38bdf8;
+      --selection-fg: #0b1120;
+      --bg-dot: #24314d;
+      --info: #38bdf8; /* Sky 400 */
+      --destructive-soft-background: #511e25;
+      --destructive-soft-foreground: #fda4af; /* Rose 300 */
+      --warning-soft-background: #562e0c;
+      --warning-soft-foreground: #fcd34d; /* Amber 300 */
+      --neutral-soft-background: #24314d;
+      --neutral-soft-foreground: #cdd5e3;
+    }
+
+    html[data-theme="sepia"] {
+      --background: #f4f0e8;
+      --foreground: #40322c;
+      --card-background: #fdfbf6;
+      --card-foreground: #2d231e;
+      --muted-foreground: #7d6f65;
+      --border-color: #e4dcd3;
+      --input-background: #fdfbf6;
+      --input-border: #d4c8bd;
+      --ring-color: #8c5a3a;
+      --table-header-background: #f4f0e8;
+      --table-row-even-background: #fdfbf6;
+      --table-row-hover-background: #f4f0e8;
+      --primary: #8c5a3a;
+      --primary-foreground: #fdfbf6;
+      --secondary: #e4dcd3;
+      --secondary-foreground: #40322c;
+      --destructive: #c0392b;
+      --destructive-foreground: #fdfbf6;
+      --subtle-background: #f4f0e8;
+      --subtle-border: #e4dcd3;
+      --link-color: #794d30;
+      --selection-bg: #8c5a3a;
+      --selection-fg: #fdfbf6;
+      --bg-dot: #e4dcd3;
+      --info: #2980b9;
+      --destructive-soft-background: #f5e1de;
+      --destructive-soft-foreground: #a23021;
+      --warning-soft-background: #f9f0d5;
+      --warning-soft-foreground: #9a6510;
+      --neutral-soft-background: #e4dcd3;
+      --neutral-soft-foreground: #5c4e46;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--background);
+      color: var(--foreground);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      background-image: radial-gradient(circle at 1px 1px, var(--bg-dot) 1px, transparent 0);
+      background-size: 25px 25px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    @supports (font-family: 'Vazirmatn') {
+      body {
+        font-family: 'Vazirmatn', sans-serif;
+      }
+    }
+    
+    ::selection {
+      background-color: var(--selection-bg);
+      color: var(--selection-fg);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1.0); }
+    }
+    .animate-fade-in-scale {
+      animation: fadeInScale 0.3s ease-out forwards;
+    }
+
+    /* Themed Tables */
+    .table-zebra tbody tr {
+      transition: background-color 0.2s ease-in-out;
+    }
+    .table-zebra tbody tr:nth-child(even) {
+      background-color: var(--table-row-even-background);
+    }
+    .table-zebra tbody tr:hover {
+      background-color: var(--table-row-hover-background);
+    }
+
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.0.3/Vazirmatn-font-face.css">
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+  <div id="root"></div>
+  <!-- Changed script type to "text/babel" for Babel to process it -->
+  <script type="text/babel" data-type="module" src="./index.tsx"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
